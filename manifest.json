@@ -1,0 +1,21 @@
+{
+    "name": "LIT-CISA Dashboard",
+    "short_name": "LIT-CISA",
+    "description": "Laboratorium Inovasi TIRMÉ, didukung oleh Gemini AI.",
+    "start_url": "./tirme_innovation_lab.html",
+    "display": "standalone",
+    "background_color": "#f0f4f8",
+    "theme_color": "#4a0082",
+    "icons": [
+        {
+            "src": "icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

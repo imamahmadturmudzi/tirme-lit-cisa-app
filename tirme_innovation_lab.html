@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Inovasi TIRMÉ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PWA Integration: Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <!-- PWA: Warna tema untuk browser -->
+    <meta name="theme-color" content="#4a0082">
+    <style>
+        /* Menggunakan font Inter untuk tampilan modern dan profesional */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        :root {
+            --color-purple-dark: #4a0082; /* Ungu Gelap */
+            --color-purple-light: #6D28D9; /* Ungu Terang */
+            --color-gold: #FFC107; /* Kuning Emas */
+            --color-red: #DC2626; /* Merah Akses */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Background lebih lembut */
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Layout Utama - Full Screen App */
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header TIRMÉ */
+        header {
+            background-color: white;
+            border-bottom: 3px solid var(--color-gold);
+        }
+
+        /* Style Logo */
+        .logo-symbol-t {
+            font-size: 40px;
+            font-weight: 900;
+            color: var(--color-purple-light);
+            line-height: 1;
+        }
+        .accent-dot-small {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--color-gold);
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
+        /* Style untuk Konten (Input & Output) */
+        .content-area {
+            padding: 20px;
+            flex-grow: 1;
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr;
+        }
+        @media (min-width: 1024px) {
+            .content-area {
+                grid-template-columns: 1fr 2fr; /* Input di kiri (lebih kecil), Output di kanan (lebih besar) */
+            }
+        }
+
+        /* Gaya untuk Input Card */
+        #inputCard {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+        }
+
+        /* Gaya untuk Output Card */
+        .output-card {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+        }
+
+        /* Gaya untuk Konten Markdown */
+        .prose h3 {
+            border-bottom: 2px solid var(--color-purple-light);
+            padding-bottom: 4px;
+            margin-top: 1.5em;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-purple-dark);
+        }
+        .prose ul {
+            list-style: disc;
+            padding-left: 1.5em;
+            margin-top: 0.5em;
+            line-height: 1.6;
+        }
+        .prose strong {
+            color: var(--color-red);
+        }
+        
+        /* Gambar dan Loading */
+        #imageGallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .image-loading-indicator {
+            background-color: #f9f9f9;
+            height: 250px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: var(--color-purple-light);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+
+        <!-- Header Aplikasi -->
+        <header class="p-4 shadow-md flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="relative w-10 h-10 flex items-center justify-center bg-gray-100 rounded-lg border-2 border-purple-800">
+                    <div class="logo-symbol-t">T</div>
+                    <div class="accent-dot-small"></div>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-extrabold text-[#4a0082]">LIT-CISA Dashboard</h1>
+                    <p class="text-xs text-gray-500 font-medium">Chief Innovation & Strategy Advisor</p>
+                </div>
+            </div>
+            <p class="font-bold text-sm text-red-600 hidden sm:block">Rasa Terbaik, Sepanjang Usia.</p>
+        </header>
+        
+        <!-- Area Konten Utama -->
+        <div class="content-area">
+            
+            <!-- Panel Kiri: Input CISA -->
+            <div id="inputCard">
+                <h2 class="text-xl font-bold mb-6 text-purple-700">⚙️ Parameter Analisis Produk</h2>
+                <div class="space-y-4">
+                    
+                    <!-- 1. Opsi Alokasi Modal -->
+                    <div>
+                        <label for="capitalAllocation" class="block text-sm font-semibold text-gray-700 mb-1">1. Alokasi Modal (CMFO Fokus):</label>
+                        <select id="capitalAllocation" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 bg-white">
+                            <option value="Bootstrap">Bootstrap (Home Kitchen, Modal < 10 Jt)</option>
+                            <option value="Full Scale">Full Scale (Toko/Pabrik Kecil, Modal > 300 Jt)</option>
+                        </select>
+                    </div>
+
+                    <!-- 2. Pilihan Brand/Segmen -->
+                    <div>
+                        <label for="brandSegment" class="block text-sm font-semibold text-gray-700 mb-1">2. Target Segmen Brand (Visi):</label>
+                        <select id="brandSegment" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 bg-white">
+                            <option value="Évi Krunch">Évi Krunch (Tren, Fusion, Muda)</option>
+                            <option value="Senja Manis">Senja Manis (Klasik, Rendah Gula, Senja)</option>
+                            <option value="Gemini Glimmer">Gemini Glimmer (Elegan, Mini, Semua Kalangan)</option>
+                        </select>
+                    </div>
+
+                    <!-- 3. Input Produk Utama -->
+                    <div>
+                        <label for="baseProduct" class="block text-sm font-semibold text-gray-700 mb-1">3. Produk Utama (Roti/Kue/Minuman) [COO Fokus]:</label>
+                        <input type="text" id="baseProduct" placeholder="Contoh: Kue Bulan, atau Es Kopi" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500">
+                    </div>
+                    
+                    <!-- 4. Input Lokasi/Wilayah -->
+                    <div>
+                        <label for="targetRegion" class="block text-sm font-semibold text-gray-700 mb-1">4. Target Wilayah Penjualan (CMFO Fokus):</label>
+                        <input type="text" id="targetRegion" placeholder="Contoh: Surabaya Timur" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500">
+                    </div>
+
+                    <!-- Tombol Generasi -->
+                    <div class="pt-4">
+                        <button id="generateButton" onclick="generateFlavorIdea()" class="w-full p-3 bg-gradient-to-r from-purple-600 to-purple-800 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition duration-200 disabled:opacity-50">
+                            ✨ Generasi Ide & Visual CISA
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel Kanan: Output Aplikasi (Teks & Visual) -->
+            <div class="space-y-5 lg:col-span-2">
+                <!-- Visualisasi Produk -->
+                <div class="output-card">
+                    <h2 class="text-xl font-bold mb-4 text-purple-700 flex items-center">
+                        <span class="mr-2">🖼️ Visualisasi Produk TIRMÉ (AI)</span>
+                        <div id="imageLoadingIndicator" class="image-loading-indicator !h-8 !w-8 hidden !p-0 !m-0">
+                            <div class="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-purple-500"></div>
+                        </div>
+                    </h2>
+                    
+                    <div id="imageGallery" class="min-h-[250px] flex items-center justify-center bg-gray-50 p-4 rounded-xl">
+                        <p class="text-gray-500 italic text-center" id="imagePlaceholder">Visualisasi produk akan muncul setelah CISA menyelesaikan analisis.</p>
+                    </div>
+                </div>
+
+                <!-- Hasil Analisis Teks -->
+                <div class="output-card">
+                    <h2 class="text-xl font-bold mb-4 text-purple-700">📝 Hasil Analisis Teks CISA</h2>
+                    <div id="loadingIndicator" class="hidden text-center p-8">
+                        <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500 mx-auto mb-3"></div>
+                        <p class="text-gray-500">CISA sedang merumuskan konsep resep dan strategi pasar...</p>
+                    </div>
+        
+                    <div id="resultsDisplay" class="min-h-[200px] space-y-4">
+                        <p class="text-gray-500 italic" id="placeholderText">Ide yang dihasilkan oleh Gemini AI akan muncul di sini. Coba input di panel kiri untuk memulai analisis!</p>
+                    </div>
+        
+                    <div id="sourcesDisplay" class="mt-6 text-sm text-gray-500 space-y-1 hidden border-t pt-4">
+                        <p class="font-semibold text-gray-700">Sumber Referensi:</p>
+                        <!-- Sumber akan diisi di sini -->
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+
+    <!-- Logika JavaScript untuk Integrasi Gemini API -->
+    <script>
+        // --- KONFIGURASI API ---
+        const apiKey = ""; 
+        const TEXT_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
+        const IMAGE_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict";
+        
+        // --- ELEMEN UI ---
+        const capitalAllocationSelect = document.getElementById('capitalAllocation');
+        const baseProductInput = document.getElementById('baseProduct');
+        const brandSegmentSelect = document.getElementById('brandSegment');
+        const targetRegionInput = document.getElementById('targetRegion');
+        const generateButton = document.getElementById('generateButton');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const resultsDisplay = document.getElementById('resultsDisplay');
+        const sourcesDisplay = document.getElementById('sourcesDisplay');
+        const placeholderText = document.getElementById('placeholderText');
+        
+        const imageGallery = document.getElementById('imageGallery');
+        const imageLoadingIndicator = document.getElementById('imageLoadingIndicator');
+        const imagePlaceholder = document.getElementById('imagePlaceholder');
+
+
+        // --- LOGIKA UTAMA ---
+
+        /**
+         * Logika Exponential Backoff untuk menangani kegagalan API
+         */
+        async function fetchWithRetry(url, options, retries = 3) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status === 429 && i < retries - 1) {
+                        // Too Many Requests, retry with delay
+                        const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        continue;
+                    }
+                    if (!response.ok) {
+                        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                    }
+                    return response;
+                } catch (error) {
+                    if (i === retries - 1) throw error;
+                    const delay = Math.pow(2, i) * 1000 + Math.random() * 500;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+
+        /**
+         * 1. Membangun prompt dan memanggil Gemini API (TEKS).
+         */
+        async function generateFlavorIdea() {
+            const capitalAllocation = capitalAllocationSelect.value;
+            const baseProduct = baseProductInput.value.trim();
+            const brandSegment = brandSegmentSelect.value;
+            const targetRegion = targetRegionInput.value.trim(); 
+
+            // VALIDASI: Memastikan Produk Utama DAN Target Wilayah diisi
+            if (!baseProduct || !targetRegion) {
+                alert('Tolong masukkan nama Produk Utama (Roti/Kue/Minuman) DAN Target Wilayah.');
+                return;
+            }
+
+            const mainSubject = baseProduct; // Produk Utama adalah fokusnya
+            
+            // Atur UI state
+            generateButton.disabled = true;
+            loadingIndicator.classList.remove('hidden');
+            resultsDisplay.innerHTML = '';
+            sourcesDisplay.classList.add('hidden');
+            placeholderText.classList.add('hidden');
+            imageGallery.innerHTML = '';
+            imagePlaceholder.classList.add('hidden');
+
+            // Cek apakah produknya adalah minuman (diasumsikan jika mengandung kata kunci tertentu)
+            const isBeverage = ['kopi', 'teh', 'minuman', 'susu', 'milk', 'coffee', 'tea', 'juice', 'smoothie', 'latte', 'boba', 'es', 'ice', 'mocktail', 'frappe'].some(keyword => mainSubject.toLowerCase().includes(keyword));
+
+            let productionFocus = isBeverage ? 'CMFO/COO Fokus (Minuman)' : 'COO Fokus (Roti/Kue)';
+            let outputSections = isBeverage 
+                ? 'Konsep Rasa Unik (Minuman), Rekomendasi Bahan Kunci, Detail Produksi (Minuman), Alasan Strategis, Prospek Penjualan Regional & Batasan Modal'
+                : 'Konsep Rasa Unik (Roti/Kue), Rekomendasi Bahan Kunci, Detail Produksi (Roti/Kue), Alasan Strategis, Prospek Penjualan Regional & Batasan Modal';
+
+
+            const systemPrompt = `Anda adalah CISA (Chief Innovation & Strategy Advisor) dari TIRMÉ Bakery. Tugas Anda adalah menghasilkan ide produk yang inovatif, unik, premium, dan sesuai dengan strategi pasar, modal, dan segmen.
+
+            1.  **Gunakan Google Search** untuk mencari tren F&B terkini, bahan lokal Indonesia, konsep sehat, fusion, dan data pasar regional.
+            2.  **Sajikan output dalam format Markdown yang rapi** dengan bagian-bagian berikut: **${outputSections}**.
+            3.  Berikan judul konsep yang menarik dan elegan.
+            4.  Pada bagian **Detail Produksi (${productionFocus})**, berikan detail langkah-langkah kunci yang diperlukan. **KRITIS: Sertakan contoh takaran bahan kunci (misalnya, dalam gram, ml, atau cangkir) dan estimasi waktu produksi/penyajian per unit/batch.**
+            5.  Pada bagian **Rekomendasi Bahan Kunci**, **sertakan kisaran harga perkiraan (IDR/satuan) untuk setiap bahan kunci, didasarkan pada pencarian tren harga di Indonesia**, untuk membantu CMFO dalam perencanaan anggaran.
+            6.  Pada bagian **Prospek Penjualan Regional & Batasan Modal**, analisis potensi pasar di wilayah yang ditentukan, hubungkan dengan batasan modal, dan tentukan kelayakan produk.
+            7.  Output harus 100% dalam Bahasa Indonesia.
+            
+            Detail Segmen Brand:
+            - Évi Krunch: Bold, Fusion, Trendy (Gen Z/Milenial), cocok untuk media sosial.
+            - Senja Manis: Klasik, Comfort, Rendah Gula/Sehat, Nostalgia (Segmen Senja/Keluarga).
+            - Gemini Glimmer: Elegan, Porsi Mini, Fokus pada Puree Buah Lokal, Premium Dessert.
+            
+            Detail Modal:
+            - Bootstrap (Modal < 10 Jt): Harus fokus pada produk margin tinggi, bahan baku yang tidak memerlukan peralatan khusus, dan model bisnis PO/Home Kitchen.
+            - Full Scale (Modal > 300 Jt): Bebas berinovasi, bisa menggunakan peralatan industri, dan siap menargetkan toko fisik premium.
+            `;
+            
+            const userQuery = `DENGAN BATASAN MODAL: "${capitalAllocation}", produk utama: "${mainSubject}", dan target brand: "${brandSegment}", lakukan analisis ide rasa dan prospek penjualan di wilayah: "${targetRegion}".`;
+            
+            const searchQueries = [
+                `tren ${mainSubject} ${targetRegion} terbaru`, 
+                `prospek penjualan roti dan kue ${targetRegion}`,
+                `harga bahan baku ${mainSubject} Indonesia`, 
+                userQuery
+            ];
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": { queries: searchQueries } }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+
+            try {
+                const response = await fetchWithRetry(`${TEXT_API_URL}?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    const text = candidate.content.parts[0].text;
+                    resultsDisplay.innerHTML = `<div class="prose max-w-none">${marked.parse(text)}</div>`;
+                    
+                    // Panggil fungsi generasi gambar setelah teks berhasil
+                    generateImage(mainSubject, brandSegment, capitalAllocation);
+
+                    // Ekstraksi Sumber (Citations)
+                    let sourcesHTML = '';
+                    const groundingMetadata = candidate.groundingMetadata;
+                    if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                        const sources = groundingMetadata.groundingAttributions
+                            .map(attr => ({
+                                uri: attr.web?.uri,
+                                title: attr.web?.title,
+                            }))
+                            .filter(source => source.uri && source.title);
+                        
+                        if (sources.length > 0) {
+                            sourcesHTML = sources.map((s, index) => 
+                                `<a href="${s.uri}" target="_blank" class="text-blue-500 hover:text-blue-700 block transition duration-150 ease-in-out">${index + 1}. ${s.title}</a>`
+                            ).join('');
+                            sourcesDisplay.querySelector('p:last-child').innerHTML = sourcesHTML;
+                            sourcesDisplay.classList.remove('hidden');
+                        }
+                    }
+
+                } else {
+                    resultsDisplay.innerHTML = '<p class="text-red-500 font-semibold">Gagal menghasilkan ide. Coba masukkan input yang lebih spesifik atau coba lagi.</p>';
+                    imageGallery.innerHTML = '<p class="text-red-500 italic">Visualisasi gagal dihasilkan karena analisis teks tidak lengkap.</p>';
+                }
+
+            } catch (error) {
+                console.error("Gemini API Call Failed (Text):", error);
+                // Menangani error dan memberikan pesan yang lebih spesifik
+                let errorMessage = 'Gagal terhubung ke Laboratorium CISA. Coba lagi atau sederhanakan input.';
+                if (error.message.includes('429')) {
+                    errorMessage = 'Terlalu banyak permintaan (Timeout). Tunggu sebentar dan coba lagi.';
+                } else if (error.message.includes('Failed to fetch')) {
+                    errorMessage = 'Kegagalan Jaringan/Timeout. Pastikan koneksi internet stabil.';
+                } else {
+                    errorMessage = `Error API: ${error.message}.`;
+                }
+                resultsDisplay.innerHTML = `<p class="text-red-500 font-semibold">Error Analisis Teks: ${errorMessage}</p>`;
+
+            } finally {
+                loadingIndicator.classList.add('hidden');
+                generateButton.disabled = false;
+            }
+        }
+
+        /**
+         * 2. Memanggil Imagen API (GAMBAR).
+         */
+        async function generateImage(product, segment, capital) {
+            imageLoadingIndicator.classList.remove('hidden');
+            imageGallery.innerHTML = '';
+
+            // Daftar kata kunci minuman yang lebih luas
+            const beverageKeywords = ['kopi', 'teh', 'minuman', 'susu', 'milk', 'coffee', 'tea', 'juice', 'smoothie', 'latte', 'boba', 'es', 'ice', 'mocktail', 'frappe'];
+            const isBeverage = beverageKeywords.some(keyword => product.toLowerCase().includes(keyword));
+
+            let productType;
+            let visualInstruction;
+
+            if (isBeverage) {
+                productType = 'Minuman gourmet';
+                visualInstruction = `Disajikan dalam gelas kristal atau cangkir elegan TIRMÉ. Fokus pada tekstur cairan, es, dan foam.`;
+            } else {
+                productType = 'Produk makanan premium (roti atau kue)';
+                visualInstruction = `Disajikan di atas piring atau display premium TIRMÉ. Fokus pada tekstur adonan, lapisan, dan topping.`;
+            }
+
+            // Prompt yang dijamin menghasilkan warna dan nuansa brand TIRMÉ
+            const prompt = `Foto close-up ${productType} "${product}" TIRMÉ. ${visualInstruction} Gaya: Fotografi makanan dramatis, pencahayaan studio. Palet warna: Ungu Tua (Deep Violet), Kuning Emas, dan Merah (Aksen). Nuansa: ${segment}.`;
+
+            const payload = {
+                instances: { prompt: prompt },
+                parameters: { "sampleCount": 1 }
+            };
+            
+            try {
+                const response = await fetchWithRetry(`${IMAGE_API_URL}?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
+                    const base64Data = result.predictions[0].bytesBase64Encoded;
+                    const imageUrl = `data:image/png;base64,${base64Data}`;
+                    
+                    imageGallery.innerHTML = `<img src="${imageUrl}" alt="Visualisasi Produk TIRMÉ">`;
+
+                } else {
+                    imageGallery.innerHTML = '<p class="text-red-500 italic">Gagal menghasilkan gambar. Coba lagi dengan prompt yang berbeda.</p>';
+                }
+
+            } catch (error) {
+                console.error("Image Generation API Call Failed:", error);
+                let errorMessage = 'Gagal membuat visualisasi. Server gambar mengalami *timeout* atau masalah koneksi.';
+                if (error.message.includes('Failed to fetch')) {
+                    errorMessage = 'Kegagalan Jaringan/Timeout saat merender gambar.';
+                }
+                imageGallery.innerHTML = `<p class="text-red-500 italic">Error Visualisasi Produk: ${errorMessage}</p>`;
+            } finally {
+                imageLoadingIndicator.classList.add('hidden');
+            }
+        }
+    </script>
+    <!-- Library marked.js untuk rendering markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</body>
+</html>
+
